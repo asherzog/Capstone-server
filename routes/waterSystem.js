@@ -132,7 +132,8 @@ router.get('/monthly/:id', (req, res, next) => {
   })
   .then(same => {
     res.json(same);
-  });
+  })
+  .catch((err) => next(err));
 });
 
 
@@ -255,7 +256,8 @@ router.get('/daily/:id', (req, res, next) => {
   })
   .then(same => {
     res.json(same);
-  });
+  })
+  .catch((err) => next(err));
 });
 
 
@@ -294,7 +296,8 @@ function findValues(well) {
       }
     }
     return total;
-  });
+  })
+  .catch((err) => {return err;});
 }
 
 
@@ -352,7 +355,8 @@ function updateWater(well) {
       }
     }
     return totals;
-  });
+  })
+  .catch((err) => {return err;});
 }
 
 
