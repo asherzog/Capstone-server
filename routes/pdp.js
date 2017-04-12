@@ -33,6 +33,13 @@ router.get('/wells/:id', function(req, res, next) {
     });
 });
 
+router.get('/lease/:id', function(req, res, next) {
+  return Pdp.find({"LEASE" : req.params.id})
+    .then(result => {
+      res.json(result);
+    });
+});
+
 router.get('/:id', function(req, res, next) {
   return Pdp.aggregate([
     {

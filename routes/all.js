@@ -3,6 +3,7 @@ var router = express.Router();
 
 const db = require('monk')('localhost/testDB');
 const wells = db.get('wells');
+const Pdp = db.get('pdp');
 
 router.get('/allsystems', function(req, res, next) {
   return wells.distinct("WATER_SYSTEM")
@@ -18,6 +19,12 @@ router.get('/allrigs', function(req, res, next) {
 
 router.get('/alltc', function(req, res, next) {
   return wells.distinct("TYPE_CURVE")
+    .then(response => res.json(response))
+    .catch((err) => next(err));
+});
+
+router.get('/allpdp', function(req, res, next) {
+  return Pdp.distinct("LEASE")
     .then(response => res.json(response))
     .catch((err) => next(err));
 });
