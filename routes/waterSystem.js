@@ -272,13 +272,11 @@ function findValues(well) {
   let year = Number(well.COMPLETION.split('/')[2]);
   return TC.aggregate([
     {
-      '$match': {"TC": well.TYPE_CURVE}
-    },
-    {
-      '$sort': {'Days': 1}
+      '$match': {"name": well.TYPE_CURVE}
     }
   ])
-  .then(tc => {
+  .then(response => {
+    let tc = response[0].data;
     let i = 0;
     while (i < tc.length) {
       total[`${month}/${day}/${year}`] = Math.round(tc[i].Water);
@@ -313,11 +311,11 @@ function updateWater(well) {
   let dayCount = (monthDayCount[month] - day) + 1;
   return TC.aggregate([
     {
-      '$match': {"TC": well.TYPE_CURVE}
+      '$match': {"name": well.TYPE_CURVE}
     }
   ])
   .then(response => {
-    let tc = response;
+    let tc = response[0].data;
     let first = tc.slice(0, dayCount);
     let total = first.reduce((a,b) => {
       return a + b.Water;

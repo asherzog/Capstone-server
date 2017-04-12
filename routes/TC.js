@@ -14,16 +14,14 @@ router.get('/', (req, res, next) => {
 router.get('/:id', (req, res, next) => {
   return TC.aggregate([
     {
-      '$match': {"TC": req.params.id}
-    },
-    {
-      '$sort': {'Days': 1}
+      '$match': {"name": req.params.id}
     }
   ])
   .then(result => {
     res.json(result);
   })
   .catch((err) => next(err));
+
 });
 
 
