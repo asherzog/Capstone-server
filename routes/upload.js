@@ -25,7 +25,9 @@ router.post('/', upload.any(), function(req, res, next) {
   var first_sheet_name = workbook.SheetNames[0];
   var worksheet = workbook.Sheets[first_sheet_name];
   parsed = xlsx.utils.sheet_to_json(worksheet, {header: 'A', raw: true});
-  parsed.shift();
+  while (Object.values(parsed[0]).length < 4) {
+    parsed.shift();
+  }
   res.json({
     type,
     name,
