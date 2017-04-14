@@ -6,6 +6,7 @@ var router = express.Router();
 
 const db = require('monk')('localhost/testDB');
 const TC = db.get('TypeCurves');
+const Wells = db.get('wells');
 
 let name = '';
 let type = '';
@@ -28,6 +29,7 @@ router.post('/', upload.any(), function(req, res, next) {
   while (Object.values(parsed[0]).length < 4) {
     parsed.shift();
   }
+  // parsed.shift();
   res.json({
     type,
     name,
@@ -67,6 +69,70 @@ router.post('/update', (req, res, next) => {
   });
 });
 
+router.post('/wells', upload.any(), function(req, res, next) {
+  type = req.body.item;
+  name = req.body.name;
+  let arraybuffer = req.files[0].buffer;
+  var data = new Uint8Array(arraybuffer);
+  var arr = new Array();
+  for (var i = 0; i != data.length; ++i) {
+    arr[i] = String.fromCharCode(data[i]);
+  };
+  var bstr = arr.join("");
+  var workbook = xlsx.read(bstr, {type:"binary"});
+  var first_sheet_name = workbook.SheetNames[0];
+  var worksheet = workbook.Sheets[first_sheet_name];
+  parsed = xlsx.utils.sheet_to_json(worksheet, {header: 'A', raw: true});
+  parsed.shift();
 
+  let normalizedData = [];
+  let parsedKeys = Object.keys(parsed[0]);
+  parsedKeys.splice(2, 0, "WATER SYSTEM");
+  parsedKeys.splice(3, 0, "TYPE CURVE");
+  parsed.forEach(obj => {
+    let item = {};
+    parsedKeys.forEach(key => {
+      if (obj[key] == undefined) {
+        obj[key] = null;
+      }
+      if (parsed[0][key]){
+        item[parsed[0][key].replace('.', '').replace(/ /g, '_')] = obj[key];
+      } else {
+        item[key.replace('.', '').replace(/ /g, '_')] = obj[key];
+      }
+    });
+    normalizedData.push(item);
+  });
+  normalizedData.shift();
+  normalizedData = normalizedData.map(obj => {
+    obj['TYPE_CURVE'] = `TC1-${obj.LAT_LEN}`;
+    obj.WATER_SYSTEM = `W${obj.RIG.split(' ')[1]}`;
+    if (obj.SPUD) {
+      obj.SPUD = getJsDateFromExcel(obj.SPUD);
+    }
+    if (obj.COMPLETION) {
+      obj.COMPLETION = getJsDateFromExcel(obj.COMPLETION);
+    }
+    if (obj.First_Production) {
+      obj.First_Production = getJsDateFromExcel(obj.First_Production);
+    }
+    if (obj.MSB) {
+      obj.MSB = getJsDateFromExcel(obj.MSB);
+    }
+    return obj;
+  });
+  Wells.drop();
+  normalizedData.forEach(well => {
+    Wells.insert(well);
+  });
+  res.json({
+    data: normalizedData
+  });
+});
+
+function getJsDateFromExcel(excelDate) {
+  let date = new Date((excelDate - (25567 + 1))*86400*1000);
+  return (date.getMonth()+1) + "/" + date.getDate() + "/" + date.getFullYear();
+}
 
 module.exports = router;

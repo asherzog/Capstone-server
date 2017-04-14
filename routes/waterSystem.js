@@ -108,6 +108,7 @@ router.get('/monthly/:id', (req, res, next) => {
           Total: pdp[j].total
         }); }
       }
+      console.log(myArr);
       for (var i = 0; i < myArr.length; i++) {
         for (var j = 0; j < pdp.length; j++) {
           if (myArr[i].month == pdp[j].month) {
