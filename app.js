@@ -12,6 +12,7 @@ var pdp = require('./routes/pdp');
 var tc = require('./routes/TC');
 var waterSystem = require('./routes/waterSystem');
 var upload = require('./routes/upload');
+var production = require('./routes/production');
 
 var app = express();
 
@@ -34,6 +35,7 @@ app.use('/pdp', pdp);
 app.use('/tc', tc);
 app.use('/waterSystem', waterSystem);
 app.use('/upload', upload);
+app.use('/production', production);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
