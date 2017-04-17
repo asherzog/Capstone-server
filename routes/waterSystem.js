@@ -28,11 +28,10 @@ router.get('/monthly/:id', (req, res, next) => {
       result.forEach(month => {
         month._id.Date = convertDate(month._id.Date, 0);
       });
-      result.sort(function(c,d){
-        var rx = /(\d+)\/(\d+)\/(\d+)/;
-        var a = Number(c._id.Date.replace(rx, '$3$1$20000'));
-        var b = Number(d._id.Date.replace(rx, '$3$1$20000'));
-        return a < b ? -1 : a == b ? 0 : 1;
+      result.sort(function(a, b) {
+        a = new Date(a._id.Date);
+        b = new Date(b._id.Date);
+        return a<b ? -1 : a>b ? 1 : 0;
       });
       pdp = result.map(pdp => {
         return {
@@ -55,6 +54,9 @@ router.get('/monthly/:id', (req, res, next) => {
           }
           if (well.COMPLETION) {
             well.COMPLETION = convertDate(well.COMPLETION, 0);
+          }
+          if (well.First_Production) {
+            well.First_Production = convertDate(well.First_Production, 0);
           }
         });
         return response;
@@ -108,7 +110,6 @@ router.get('/monthly/:id', (req, res, next) => {
           Total: pdp[j].total
         }); }
       }
-      console.log(myArr);
       for (var i = 0; i < myArr.length; i++) {
         for (var j = 0; j < pdp.length; j++) {
           if (myArr[i].month == pdp[j].month) {
@@ -266,11 +267,14 @@ function findValues(well) {
   if (!well.COMPLETION) {
     well.COMPLETION = convertDate(well.SPUD, 60);
   }
+  if (!well.First_Production) {
+    well.First_Production = convertDate(well.COMPLETION, 7);
+  }
   let total = {};
   let monthDayCount = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-  let month = Number(well.COMPLETION.split('/')[0]);
-  let day = Number(well.COMPLETION.split('/')[1]);
-  let year = Number(well.COMPLETION.split('/')[2]);
+  let month = Number(well.First_Production.split('/')[0]);
+  let day = Number(well.First_Production.split('/')[1]);
+  let year = Number(well.First_Production.split('/')[2]);
   return TC.aggregate([
     {
       '$match': {"name": well.TYPE_CURVE}
@@ -306,9 +310,12 @@ function updateWater(well) {
   if (!well.COMPLETION) {
     well.COMPLETION = convertDate(well.SPUD, 60);
   }
-  let month = Number(well.COMPLETION.split('/')[0]);
-  let day = Number(well.COMPLETION.split('/')[1]);
-  let year = Number(well.COMPLETION.split('/')[2]);
+  if (!well.First_Production) {
+    well.First_Production = convertDate(well.COMPLETION, 7);
+  }
+  let month = Number(well.First_Production.split('/')[0]);
+  let day = Number(well.First_Production.split('/')[1]);
+  let year = Number(well.First_Production.split('/')[2]);
   let dayCount = (monthDayCount[month] - day) + 1;
   return TC.aggregate([
     {

@@ -7,6 +7,7 @@ var router = express.Router();
 const db = require('monk')('localhost/testDB');
 const TC = db.get('TypeCurves');
 const Wells = db.get('wells');
+const Pdp = db.get('pdp');
 
 let name = '';
 let type = '';
@@ -29,7 +30,6 @@ router.post('/', upload.any(), function(req, res, next) {
   while (Object.values(parsed[0]).length < 4) {
     parsed.shift();
   }
-  // parsed.shift();
   res.json({
     type,
     name,
@@ -45,7 +45,7 @@ router.post('/update', (req, res, next) => {
   let newPdp = [];
   Object.keys(originalColumns).forEach(oldKey => {
     Object.keys(columnNames).forEach(key => {
-      if (columnNames[key] == originalColumns[oldKey]) {
+      if (columnNames[key] == originalColumns[oldKey].replace('.', '').replace(/ /g, '_')) {
         oldKeyArr.push(oldKey);
       }
     });
@@ -61,6 +61,32 @@ router.post('/update', (req, res, next) => {
     } else {
       newPdp.push(day);
     }
+  }
+  if (type == 'PDP') {
+    newPdp.shift();
+    Pdp.drop().then(() => {
+      newPdp.forEach(month => {
+        month.OUTDATE = getJsDateFromExcel(month.OUTDATE);
+        Pdp.insert(month)
+          .then(() => {
+            res.json({
+              message: '👍'
+            });
+          });
+      });
+    });
+  }
+  if (type == 'Type Curve') {
+    newTc.shift();
+    TC.insert({
+      "name": name,
+      data: newTc
+    })
+    .then(() => {
+      res.json({
+        message: '👍'
+      });
+    });
   }
   console.log(newTc);
   console.log(newPdp);
