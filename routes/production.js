@@ -112,9 +112,9 @@ router.get('/monthly/:id', (req, res, next) => {
             New_Wells_Gas: 0,
             New_Wells_Oil: 0,
             New_Wells_BOE: 0,
-            Total_Gas: pdp[j].Gas,
-            Total_Oil: pdp[j].Oil,
-            Total_BOE: pdp[j].BOE
+            Total_Gas: numberWithCommas(pdp[j].Gas),
+            Total_Oil: numberWithCommas(pdp[j].Oil),
+            Total_BOE: numberWithCommas(pdp[j].BOE)
           });
         }
       }
@@ -124,9 +124,9 @@ router.get('/monthly/:id', (req, res, next) => {
             same[j]['New_Wells_Gas'] = numberWithCommas((Number(same[j]['New_Wells_Gas']) + Number(myArr[i].Gas)).toFixed(0));
             same[j]['New_Wells_Oil'] = numberWithCommas((Number(same[j]['New_Wells_Oil']) + Number(myArr[i].Oil)).toFixed(0));
             same[j]['New_Wells_BOE'] = numberWithCommas((Number(same[j]['New_Wells_BOE']) + Number(myArr[i].BOE)).toFixed(0));
-            same[j]['Total_Gas'] = numberWithCommas((Number(same[j]['Total_Gas']) + Number(myArr[i].Gas)).toFixed(0));
-            same[j]['Total_Oil'] = numberWithCommas((Number(same[j]['Total_Oil']) + Number(myArr[i].Oil)).toFixed(0));
-            same[j]['Total_BOE'] = numberWithCommas((Number(same[j]['Total_BOE']) + Number(myArr[i].BOE)).toFixed(0));
+            same[j]['Total_Gas'] = numberWithCommas((Number(same[j]['Total_Gas'].replace(',', '')) + Number(myArr[i].Gas)).toFixed(0));
+            same[j]['Total_Oil'] = numberWithCommas((Number(same[j]['Total_Oil'].replace(',', '')) + Number(myArr[i].Oil)).toFixed(0));
+            same[j]['Total_BOE'] = numberWithCommas((Number(same[j]['Total_BOE'].replace(',', '')) + Number(myArr[i].BOE)).toFixed(0));
           }
         }
       }
@@ -239,9 +239,9 @@ router.get('/monthly/:id', (req, res, next) => {
           New_Wells_Gas: 0,
           New_Wells_Oil: 0,
           New_Wells_BOE: 0,
-          Total_Gas: pdp[j].Gas,
-          Total_Oil: pdp[j].Oil,
-          Total_BOE: pdp[j].BOE
+          Total_Gas: numberWithCommas(pdp[j].Gas),
+          Total_Oil: numberWithCommas(pdp[j].Oil),
+          Total_BOE: numberWithCommas(pdp[j].BOE)
         }); }
       }
       for (var i = 0; i < myArr.length; i++) {
@@ -250,9 +250,9 @@ router.get('/monthly/:id', (req, res, next) => {
             same[j]['New_Wells_Gas'] = numberWithCommas((Number(same[j]['New_Wells_Gas']) + Number(myArr[i].Gas)).toFixed(0));
             same[j]['New_Wells_Oil'] = numberWithCommas((Number(same[j]['New_Wells_Oil']) + Number(myArr[i].Oil)).toFixed(0));
             same[j]['New_Wells_BOE'] = numberWithCommas((Number(same[j]['New_Wells_BOE']) + Number(myArr[i].BOE)).toFixed(0));
-            same[j]['Total_Gas'] = numberWithCommas((Number(same[j]['Total_Gas']) + Number(myArr[i].Gas)).toFixed(0));
-            same[j]['Total_Oil'] = numberWithCommas((Number(same[j]['Total_Oil']) + Number(myArr[i].Oil)).toFixed(0));
-            same[j]['Total_BOE'] = numberWithCommas((Number(same[j]['Total_BOE']) + Number(myArr[i].BOE)).toFixed(0));
+            same[j]['Total_Gas'] = numberWithCommas((Number(same[j]['Total_Gas'].replace(',', '')) + Number(myArr[i].Gas)).toFixed(0));
+            same[j]['Total_Oil'] = numberWithCommas((Number(same[j]['Total_Oil'].replace(',', '')) + Number(myArr[i].Oil)).toFixed(0));
+            same[j]['Total_BOE'] = numberWithCommas((Number(same[j]['Total_BOE'].replace(',', '')) + Number(myArr[i].BOE)).toFixed(0));
           }
         }
       }
@@ -377,9 +377,9 @@ router.get('/daily/:id', (req, res, next) => {
             New_Wells_Gas: 0,
             New_Wells_Oil: 0,
             New_Wells_BOE: 0,
-            Total_Gas: pdp[j].Gas,
-            Total_Oil: pdp[j].Oil,
-            Total_BOE: pdp[j].BOE,
+            Total_Gas: numberWithCommas(pdp[j].Gas),
+            Total_Oil: numberWithCommas(pdp[j].Oil),
+            Total_BOE: numberWithCommas(pdp[j].BOE),
           });
         }
       }
@@ -389,9 +389,9 @@ router.get('/daily/:id', (req, res, next) => {
             same[j]['New_Wells_Gas'] = numberWithCommas((Number(same[j]['New_Wells_Gas']) + Number(myArr[i].Gas)).toFixed(0));
             same[j]['New_Wells_Oil'] = numberWithCommas((Number(same[j]['New_Wells_Oil']) + Number(myArr[i].Oil)).toFixed(0));
             same[j]['New_Wells_BOE'] = numberWithCommas((Number(same[j]['New_Wells_BOE']) + Number(myArr[i].BOE)).toFixed(0));
-            same[j]['Total_Gas'] = numberWithCommas((Number(same[j]['Total_Gas']) + Number(myArr[i].Gas)).toFixed(0));
-            same[j]['Total_Oil'] = numberWithCommas((Number(same[j]['Total_Oil']) + Number(myArr[i].Oil)).toFixed(0));
-            same[j]['Total_BOE'] = numberWithCommas((Number(same[j]['Total_BOE']) + Number(myArr[i].BOE)).toFixed(0));
+            same[j]['Total_Gas'] = numberWithCommas((Number(same[j]['Total_Gas'].replace(',', '')) + Number(myArr[i].Gas)).toFixed(0));
+            same[j]['Total_Oil'] = numberWithCommas((Number(same[j]['Total_Oil'].replace(',', '')) + Number(myArr[i].Oil)).toFixed(0));
+            same[j]['Total_BOE'] = numberWithCommas((Number(same[j]['Total_BOE'].replace(',', '')) + Number(myArr[i].BOE)).toFixed(0));
           }
         }
       }
@@ -515,9 +515,9 @@ router.get('/daily/:id', (req, res, next) => {
             New_Wells_Gas: 0,
             New_Wells_Oil: 0,
             New_Wells_BOE: 0,
-            Total_Gas: pdp[j].Gas,
-            Total_Oil: pdp[j].Oil,
-            Total_BOE: pdp[j].BOE,
+            Total_Gas: numberWithCommas(pdp[j].Gas),
+            Total_Oil: numberWithCommas(pdp[j].Oil),
+            Total_BOE: numberWithCommas(pdp[j].BOE),
           });
         }
       }
@@ -527,9 +527,9 @@ router.get('/daily/:id', (req, res, next) => {
             same[j]['New_Wells_Gas'] = numberWithCommas((Number(same[j]['New_Wells_Gas']) + Number(myArr[i].Gas)).toFixed(0));
             same[j]['New_Wells_Oil'] = numberWithCommas((Number(same[j]['New_Wells_Oil']) + Number(myArr[i].Oil)).toFixed(0));
             same[j]['New_Wells_BOE'] = numberWithCommas((Number(same[j]['New_Wells_BOE']) + Number(myArr[i].BOE)).toFixed(0));
-            same[j]['Total_Gas'] = numberWithCommas((Number(same[j]['Total_Gas']) + Number(myArr[i].Gas)).toFixed(0));
-            same[j]['Total_Oil'] = numberWithCommas((Number(same[j]['Total_Oil']) + Number(myArr[i].Oil)).toFixed(0));
-            same[j]['Total_BOE'] = numberWithCommas((Number(same[j]['Total_BOE']) + Number(myArr[i].BOE)).toFixed(0));
+            same[j]['Total_Gas'] = numberWithCommas((Number(same[j]['Total_Gas'].replace(',', '')) + Number(myArr[i].Gas)).toFixed(0));
+            same[j]['Total_Oil'] = numberWithCommas((Number(same[j]['Total_Oil'].replace(',', '')) + Number(myArr[i].Oil)).toFixed(0));
+            same[j]['Total_BOE'] = numberWithCommas((Number(same[j]['Total_BOE'].replace(',', '')) + Number(myArr[i].BOE)).toFixed(0));
           }
         }
       }
