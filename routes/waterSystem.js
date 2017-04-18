@@ -112,7 +112,7 @@ router.get('/monthly/:id', (req, res, next) => {
       }
       for (var i = 0; i < myArr.length; i++) {
         for (var j = 0; j < pdp.length; j++) {
-          if (myArr[i].month == pdp[j].month) {
+          if (new Date(myArr[i].month).getTime() == new Date(pdp[j].month).getTime()) {
             same[j]['New_Wells'] = numberWithCommas(Number(same[j]['New_Wells']) + myArr[i].total);
             same[j]['Total'] = numberWithCommas(Number(same[j]['Total']) + myArr[i].total);
           }
@@ -235,7 +235,7 @@ router.get('/daily/:id', (req, res, next) => {
       }
       for (var i = 0; i < myArr.length; i++) {
         for (var j = 0; j < pdp.length; j++) {
-          if (myArr[i].day == pdp[j].day) {
+          if (new Date(myArr[i].day).getTime() == new Date(pdp[j].day).getTime()) {
             same[j]['New_Wells'] = numberWithCommas(Number(same[j]['New_Wells']) + myArr[i].total);
             same[j]['Total'] = numberWithCommas(Number(same[j]['Total']) + myArr[i].total);
           }
