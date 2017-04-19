@@ -21,9 +21,6 @@ router.get('/:id', (req, res, next) => {
     res.json(result);
   })
   .catch((err) => next(err));
-
 });
-
-
 
 module.exports = router;
