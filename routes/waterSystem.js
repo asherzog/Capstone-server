@@ -65,7 +65,9 @@ router.get('/monthly/:id', (req, res, next) => {
   .then(waterSystem => {
     let totals = [];
     for (var i = 0; i < waterSystem.length; i++) {
-      totals.push(updateWater(waterSystem[i]));
+      if (waterSystem[i].RIG != 'Bullpen') {
+        totals.push(updateWater(waterSystem[i]));
+      }
     }
     return totals;
   })
@@ -187,7 +189,9 @@ router.get('/daily/:id', (req, res, next) => {
       .then(system => {
         let totals = [];
         for (var i = 0; i < system.length; i++) {
-          totals.push(findValues(system[i]));
+          if (system[i].RIG != 'Bullpen') {
+            totals.push(findValues(system[i]));
+          }
         }
         return totals;
       });
