@@ -107,7 +107,7 @@ router.get('/monthly/:id', (req, res, next) => {
         });
         if (!found) { same.push({
           Month: pdp[j].month,
-          PDP: numberWithCommas(pdp[j].total),
+          PDP: pdp[j].total,
           New_Wells: 0,
           Total: pdp[j].total
         }); }
@@ -115,8 +115,8 @@ router.get('/monthly/:id', (req, res, next) => {
       for (var i = 0; i < myArr.length; i++) {
         for (var j = 0; j < pdp.length; j++) {
           if (new Date(myArr[i].month).getTime() == new Date(pdp[j].month).getTime()) {
-            same[j]['New_Wells'] = numberWithCommas(Number(same[j]['New_Wells']) + myArr[i].total);
-            same[j]['Total'] = numberWithCommas(Number(same[j]['Total']) + myArr[i].total);
+            same[j]['New_Wells'] = same[j]['New_Wells'] + myArr[i].total;
+            same[j]['Total'] = same[j]['Total'] + myArr[i].total;
           }
         }
       }
@@ -126,8 +126,8 @@ router.get('/monthly/:id', (req, res, next) => {
           same.push({
             Month: myArr[i].month,
             PDP: 0,
-            'New_Wells': numberWithCommas(myArr[i].total),
-            Total: numberWithCommas(myArr[i].total)
+            'New_Wells': myArr[i].total,
+            Total: myArr[i].total
           });
         }
       }
@@ -232,7 +232,7 @@ router.get('/daily/:id', (req, res, next) => {
         });
         if (!found) { same.push({
           Day: pdp[j].day,
-          PDP: numberWithCommas(pdp[j].total),
+          PDP: pdp[j].total,
           New_Wells: 0,
           Total: pdp[j].total
         }); }
@@ -240,8 +240,8 @@ router.get('/daily/:id', (req, res, next) => {
       for (var i = 0; i < myArr.length; i++) {
         for (var j = 0; j < pdp.length; j++) {
           if (new Date(myArr[i].day).getTime() == new Date(pdp[j].day).getTime()) {
-            same[j]['New_Wells'] = numberWithCommas(Number(same[j]['New_Wells']) + myArr[i].total);
-            same[j]['Total'] = numberWithCommas(Number(same[j]['Total']) + myArr[i].total);
+            same[j]['New_Wells'] = same[j]['New_Wells'] + myArr[i].total;
+            same[j]['Total'] = same[j]['Total'] + myArr[i].total;
           }
         }
       }
@@ -252,8 +252,8 @@ router.get('/daily/:id', (req, res, next) => {
           same.push({
             Day: myArr[i].day,
             PDP: 0,
-            'New_Wells': numberWithCommas(myArr[i].total),
-            Total: numberWithCommas(myArr[i].total)
+            'New_Wells': myArr[i].total,
+            Total: myArr[i].total
           });
         }
       }
