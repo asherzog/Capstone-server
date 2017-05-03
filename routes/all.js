@@ -4,6 +4,7 @@ var router = express.Router();
 const db = require('monk')('localhost/testDB');
 const wells = db.get('wells');
 const Pdp = db.get('pdp');
+const TC = db.get('TypeCurves');
 
 router.get('/allsystems', function(req, res, next) {
   return wells.distinct("WATER_SYSTEM")
@@ -28,7 +29,7 @@ router.get('/allrigs', function(req, res, next) {
 });
 
 router.get('/alltc', function(req, res, next) {
-  return wells.distinct("TYPE_CURVE")
+  return TC.distinct("name")
     .then(response => res.json(response))
     .catch((err) => next(err));
 });
