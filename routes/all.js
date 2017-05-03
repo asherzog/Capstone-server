@@ -7,7 +7,17 @@ const Pdp = db.get('pdp');
 
 router.get('/allsystems', function(req, res, next) {
   return wells.distinct("WATER_SYSTEM")
-    .then(response => res.json(response))
+    .then(response => {
+      let wells = response;
+      Pdp.distinct("Water_System")
+        .then(results => {
+          let pdp = results;
+          let answer = wells.concat(pdp.filter((item => {
+            return wells.indexOf(item) < 0;
+          })));
+          res.json(answer);
+        });
+    })
     .catch((err) => next(err));
 });
 

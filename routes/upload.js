@@ -45,7 +45,7 @@ router.post('/update', (req, res, next) => {
   let newPdp = [];
   Object.keys(originalColumns).forEach(oldKey => {
     Object.keys(columnNames).forEach(key => {
-      if (columnNames[key] == originalColumns[oldKey].replace('.', '').replace(/ /g, '_')) {
+      if (columnNames[key] == originalColumns[oldKey]) {
         oldKeyArr.push(oldKey);
       }
     });
@@ -67,12 +67,11 @@ router.post('/update', (req, res, next) => {
     Pdp.drop().then(() => {
       newPdp.forEach(month => {
         month.OUTDATE = getJsDateFromExcel(month.OUTDATE);
-        Pdp.insert(month)
-          .then(() => {
-            res.json({
-              message: '👍'
-            });
-          });
+        Pdp.insert(month);
+      });
+    }).then(() => {
+      res.json({
+        message: "👍"
       });
     });
   }
@@ -86,13 +85,8 @@ router.post('/update', (req, res, next) => {
       res.json({
         message: '👍'
       });
-    });
+    }).catch(err => next(err));
   }
-  console.log(newTc);
-  console.log(newPdp);
-  res.json({
-    message: '👍'
-  });
 });
 
 router.post('/wells', upload.any(), function(req, res, next) {
