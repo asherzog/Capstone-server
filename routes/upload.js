@@ -106,7 +106,7 @@ router.post('/wells', upload.any(), function(req, res, next) {
   var first_sheet_name = workbook.SheetNames[0];
   var worksheet = workbook.Sheets[first_sheet_name];
   parsed = xlsx.utils.sheet_to_json(worksheet, {header: 'A', raw: true});
-  // parsed.shift();
+  parsed.shift();
 
   let normalizedData = [];
   let parsedKeys = Object.keys(parsed[0]);
@@ -119,9 +119,9 @@ router.post('/wells', upload.any(), function(req, res, next) {
         obj[key] = null;
       }
       if (parsed[0][key]){
-        item[parsed[0][key]] = obj[key];
+        item[parsed[0][key].replace('.', '').replace(/ /g, '_')] = obj[key];
       } else {
-        item[key.replace('.', '').replace(/ /g, '_')] = obj[key];
+        item[key] = obj[key];
       }
     });
     normalizedData.push(item);
