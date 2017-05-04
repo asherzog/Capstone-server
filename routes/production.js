@@ -32,8 +32,8 @@ router.get('/monthly/:id', (req, res, next) => {
       pdp = result.map(pdp => {
         return {
           month: pdp._id.Date,
-          Oil: pdp.Gross_Oil,
-          Gas: pdp.Gross_Gas,
+          Oil: Math.round(pdp.Gross_Oil),
+          Gas: Math.round(pdp.Gross_Gas),
           BOE: Number((pdp.Gross_Oil + (pdp.Net_Gas/6)).toFixed(0))
         };
       });
@@ -69,9 +69,9 @@ router.get('/monthly/:id', (req, res, next) => {
             let newKey = convertDate(key, 0);
             let newMonth = {
               month: newKey,
-              Oil : well[key].Oil,
-              Gas: well[key].Gas,
-              BOE: well[key].Oil + (well[key].Gas * well[key].NRI / 6)
+              Oil : Math.round(well[key].Oil),
+              Gas: Math.round(well[key].Gas),
+              BOE: Math.round(well[key].Oil + (well[key].Gas * well[key].NRI / 6))
             };
             var found = myArr.some(function (el) {
               return el.month === newMonth.month;
@@ -84,7 +84,7 @@ router.get('/monthly/:id', (req, res, next) => {
                 if (myArr[i].month == newMonth.month) {
                   myArr[i].Oil += newMonth.Oil;
                   myArr[i].Gas += newMonth.Gas;
-                  myArr[i].BOE = myArr[i].Oil + (myArr[i].Gas * well[key].NRI / 6);
+                  myArr[i].BOE = Math.round(myArr[i].Oil + (myArr[i].Gas * well[key].NRI / 6));
                 }
               }
             }
@@ -106,27 +106,27 @@ router.get('/monthly/:id', (req, res, next) => {
         if (!found) {
           same.push({
             Month: pdp[j].month,
-            PDP_Gas: numberWithCommas(pdp[j].Gas),
-            PDP_Oil: numberWithCommas(pdp[j].Oil),
-            PDP_BOE: numberWithCommas(pdp[j].BOE),
+            PDP_Gas: pdp[j].Gas,
+            PDP_Oil: pdp[j].Oil,
+            PDP_BOE: pdp[j].BOE,
             New_Wells_Gas: 0,
             New_Wells_Oil: 0,
             New_Wells_BOE: 0,
-            Total_Gas: numberWithCommas(pdp[j].Gas),
-            Total_Oil: numberWithCommas(pdp[j].Oil),
-            Total_BOE: numberWithCommas(pdp[j].BOE)
+            Total_Gas: pdp[j].Gas,
+            Total_Oil: pdp[j].Oil,
+            Total_BOE: pdp[j].BOE
           });
         }
       }
       for (var i = 0; i < myArr.length; i++) {
         for (var j = 0; j < same.length; j++) {
           if (new Date(myArr[i].month).getTime() == new Date(same[j].Month).getTime()) {
-            same[j]['New_Wells_Gas'] = numberWithCommas((Number(same[j]['New_Wells_Gas']) + Number(myArr[i].Gas)).toFixed(0));
-            same[j]['New_Wells_Oil'] = numberWithCommas((Number(same[j]['New_Wells_Oil']) + Number(myArr[i].Oil)).toFixed(0));
-            same[j]['New_Wells_BOE'] = numberWithCommas((Number(same[j]['New_Wells_BOE']) + Number(myArr[i].BOE)).toFixed(0));
-            same[j]['Total_Gas'] = numberWithCommas((Number(same[j]['Total_Gas'].replace(',', '')) + Number(myArr[i].Gas)).toFixed(0));
-            same[j]['Total_Oil'] = numberWithCommas((Number(same[j]['Total_Oil'].replace(',', '')) + Number(myArr[i].Oil)).toFixed(0));
-            same[j]['Total_BOE'] = numberWithCommas((Number(same[j]['Total_BOE'].replace(',', '')) + Number(myArr[i].BOE)).toFixed(0));
+            same[j]['New_Wells_Gas'] += myArr[i].Gas;
+            same[j]['New_Wells_Oil'] += myArr[i].Oil;
+            same[j]['New_Wells_BOE'] += myArr[i].BOE;
+            same[j]['Total_Gas'] += myArr[i].Gas;
+            same[j]['Total_Oil'] += myArr[i].Oil;
+            same[j]['Total_BOE'] += myArr[i].BOE;
           }
         }
       }
@@ -160,8 +160,8 @@ router.get('/monthly/:id', (req, res, next) => {
       pdp = result.map(pdp => {
         return {
           month: pdp._id.Date,
-          Oil: pdp.Net_Oil,
-          Gas: pdp.Net_Gas,
+          Oil: Math.round(pdp.Net_Oil),
+          Gas: Math.round(pdp.Net_Gas),
           BOE: Number((pdp.Net_Oil + (pdp.Net_Gas/6)).toFixed(0))
         };
       });
@@ -199,7 +199,7 @@ router.get('/monthly/:id', (req, res, next) => {
               month: newKey,
               Oil : well[key].Oil,
               Gas: well[key].Gas,
-              BOE: well[key].Oil + (well[key].Gas / 6)
+              BOE: Math.round(well[key].Oil + (well[key].Gas / 6))
             };
             var found = myArr.some(function (el) {
               return el.month === newMonth.month;
@@ -212,7 +212,7 @@ router.get('/monthly/:id', (req, res, next) => {
                 if (myArr[i].month == newMonth.month) {
                   myArr[i].Oil += newMonth.Oil;
                   myArr[i].Gas += newMonth.Gas;
-                  myArr[i].BOE = myArr[i].Oil + (myArr[i].Gas / 6);
+                  myArr[i].BOE = Math.round(myArr[i].Oil + (myArr[i].Gas / 6));
                 }
               }
             }
@@ -233,26 +233,26 @@ router.get('/monthly/:id', (req, res, next) => {
         });
         if (!found) { same.push({
           Month: pdp[j].month,
-          PDP_Gas: numberWithCommas(pdp[j].Gas),
-          PDP_Oil: numberWithCommas(pdp[j].Oil),
-          PDP_BOE: numberWithCommas(pdp[j].BOE),
+          PDP_Gas: pdp[j].Gas,
+          PDP_Oil: pdp[j].Oil,
+          PDP_BOE: pdp[j].BOE,
           New_Wells_Gas: 0,
           New_Wells_Oil: 0,
           New_Wells_BOE: 0,
-          Total_Gas: numberWithCommas(pdp[j].Gas),
-          Total_Oil: numberWithCommas(pdp[j].Oil),
-          Total_BOE: numberWithCommas(pdp[j].BOE)
+          Total_Gas: pdp[j].Gas,
+          Total_Oil: pdp[j].Oil,
+          Total_BOE: pdp[j].BOE
         }); }
       }
       for (var i = 0; i < myArr.length; i++) {
         for (var j = 0; j < pdp.length; j++) {
           if (new Date(myArr[i].month).getTime() == new Date(same[j].Month).getTime()) {
-            same[j]['New_Wells_Gas'] = numberWithCommas((Number(same[j]['New_Wells_Gas']) + Number(myArr[i].Gas)).toFixed(0));
-            same[j]['New_Wells_Oil'] = numberWithCommas((Number(same[j]['New_Wells_Oil']) + Number(myArr[i].Oil)).toFixed(0));
-            same[j]['New_Wells_BOE'] = numberWithCommas((Number(same[j]['New_Wells_BOE']) + Number(myArr[i].BOE)).toFixed(0));
-            same[j]['Total_Gas'] = numberWithCommas((Number(same[j]['Total_Gas'].replace(',', '')) + Number(myArr[i].Gas)).toFixed(0));
-            same[j]['Total_Oil'] = numberWithCommas((Number(same[j]['Total_Oil'].replace(',', '')) + Number(myArr[i].Oil)).toFixed(0));
-            same[j]['Total_BOE'] = numberWithCommas((Number(same[j]['Total_BOE'].replace(',', '')) + Number(myArr[i].BOE)).toFixed(0));
+            same[j]['New_Wells_Gas'] += myArr[i].Gas;
+            same[j]['New_Wells_Oil'] += myArr[i].Oil;
+            same[j]['New_Wells_BOE'] += myArr[i].BOE;
+            same[j]['Total_Gas'] += myArr[i].Gas;
+            same[j]['Total_Oil'] += myArr[i].Oil;
+            same[j]['Total_BOE'] += myArr[i].BOE;
           }
         }
       }
@@ -337,10 +337,10 @@ router.get('/daily/:id', (req, res, next) => {
             let date = convertDate(key, 0);
             let dateObj = {
               day: date,
-              Oil: well[key].Oil,
-              Gas: well[key].Gas,
+              Oil: Math.round(well[key].Oil),
+              Gas: Math.round(well[key].Gas),
               NRI: well[key].NRI,
-              BOE: well[key].Oil + (well[key].Gas * well[key].NRI / 6)
+              BOE: Math.round(well[key].Oil + (well[key].Gas * well[key].NRI / 6))
             };
             var found = myArr.some(function (el) {
               return el.day === dateObj.day;
@@ -371,27 +371,27 @@ router.get('/daily/:id', (req, res, next) => {
         if (!found) {
           same.push({
             Day: pdp[j].day,
-            PDP_Gas: numberWithCommas(pdp[j].Gas),
-            PDP_Oil: numberWithCommas(pdp[j].Oil),
-            PDP_BOE: numberWithCommas(pdp[j].BOE),
+            PDP_Gas: pdp[j].Gas,
+            PDP_Oil: pdp[j].Oil,
+            PDP_BOE: pdp[j].BOE,
             New_Wells_Gas: 0,
             New_Wells_Oil: 0,
             New_Wells_BOE: 0,
-            Total_Gas: numberWithCommas(pdp[j].Gas),
-            Total_Oil: numberWithCommas(pdp[j].Oil),
-            Total_BOE: numberWithCommas(pdp[j].BOE),
+            Total_Gas: pdp[j].Gas,
+            Total_Oil: pdp[j].Oil,
+            Total_BOE: pdp[j].BOE,
           });
         }
       }
       for (var i = 0; i < myArr.length; i++) {
         for (var j = 0; j < same.length; j++) {
           if (myArr[i].day === same[j].Day) {
-            same[j]['New_Wells_Gas'] = numberWithCommas((Number(same[j]['New_Wells_Gas']) + Number(myArr[i].Gas)).toFixed(0));
-            same[j]['New_Wells_Oil'] = numberWithCommas((Number(same[j]['New_Wells_Oil']) + Number(myArr[i].Oil)).toFixed(0));
-            same[j]['New_Wells_BOE'] = numberWithCommas((Number(same[j]['New_Wells_BOE']) + Number(myArr[i].BOE)).toFixed(0));
-            same[j]['Total_Gas'] = numberWithCommas((Number(same[j]['Total_Gas'].replace(',', '')) + Number(myArr[i].Gas)).toFixed(0));
-            same[j]['Total_Oil'] = numberWithCommas((Number(same[j]['Total_Oil'].replace(',', '')) + Number(myArr[i].Oil)).toFixed(0));
-            same[j]['Total_BOE'] = numberWithCommas((Number(same[j]['Total_BOE'].replace(',', '')) + Number(myArr[i].BOE)).toFixed(0));
+            same[j]['New_Wells_Gas'] +=myArr[i].Gas;
+            same[j]['New_Wells_Oil'] +=myArr[i].Oil;
+            same[j]['New_Wells_BOE'] +=myArr[i].BOE;
+            same[j]['Total_Gas'] +=myArr[i].Gas;
+            same[j]['Total_Oil'] +=myArr[i].Oil;
+            same[j]['Total_BOE'] +=myArr[i].BOE;
           }
         }
       }
@@ -478,7 +478,7 @@ router.get('/daily/:id', (req, res, next) => {
               Oil: well[key].Oil,
               Gas: well[key].Gas,
               NRI: well[key].NRI,
-              BOE: well[key].Oil + (well[key].Gas / 6)
+              BOE: Math.round(well[key].Oil + (well[key].Gas / 6))
             };
             var found = myArr.some(function (el) {
               return el.day === dateObj.day;
@@ -509,27 +509,27 @@ router.get('/daily/:id', (req, res, next) => {
         if (!found) {
           same.push({
             Day: pdp[j].day,
-            PDP_Gas: numberWithCommas(pdp[j].Gas),
-            PDP_Oil: numberWithCommas(pdp[j].Oil),
-            PDP_BOE: numberWithCommas(pdp[j].BOE),
+            PDP_Gas: pdp[j].Gas,
+            PDP_Oil: pdp[j].Oil,
+            PDP_BOE: pdp[j].BOE,
             New_Wells_Gas: 0,
             New_Wells_Oil: 0,
             New_Wells_BOE: 0,
-            Total_Gas: numberWithCommas(pdp[j].Gas),
-            Total_Oil: numberWithCommas(pdp[j].Oil),
-            Total_BOE: numberWithCommas(pdp[j].BOE),
+            Total_Gas: pdp[j].Gas,
+            Total_Oil: pdp[j].Oil,
+            Total_BOE: pdp[j].BOE,
           });
         }
       }
       for (var i = 0; i < myArr.length; i++) {
         for (var j = 0; j < same.length; j++) {
           if (myArr[i].day === same[j].Day) {
-            same[j]['New_Wells_Gas'] = numberWithCommas((Number(same[j]['New_Wells_Gas']) + Number(myArr[i].Gas)).toFixed(0));
-            same[j]['New_Wells_Oil'] = numberWithCommas((Number(same[j]['New_Wells_Oil']) + Number(myArr[i].Oil)).toFixed(0));
-            same[j]['New_Wells_BOE'] = numberWithCommas((Number(same[j]['New_Wells_BOE']) + Number(myArr[i].BOE)).toFixed(0));
-            same[j]['Total_Gas'] = numberWithCommas((Number(same[j]['Total_Gas'].replace(',', '')) + Number(myArr[i].Gas)).toFixed(0));
-            same[j]['Total_Oil'] = numberWithCommas((Number(same[j]['Total_Oil'].replace(',', '')) + Number(myArr[i].Oil)).toFixed(0));
-            same[j]['Total_BOE'] = numberWithCommas((Number(same[j]['Total_BOE'].replace(',', '')) + Number(myArr[i].BOE)).toFixed(0));
+            same[j]['New_Wells_Gas'] += myArr[i].Gas;
+            same[j]['New_Wells_Oil'] += myArr[i].Oil;
+            same[j]['New_Wells_BOE'] += myArr[i].BOE;
+            same[j]['Total_Gas'] += myArr[i].Gas;
+            same[j]['Total_Oil'] += myArr[i].Oil;
+            same[j]['Total_BOE'] += myArr[i].BOE;
           }
         }
       }

@@ -27,13 +27,16 @@ router.post('/', upload.any(), function(req, res, next) {
   var first_sheet_name = workbook.SheetNames[0];
   var worksheet = workbook.Sheets[first_sheet_name];
   parsed = xlsx.utils.sheet_to_json(worksheet, {header: 'A', raw: true});
-  while (Object.values(parsed[0]).length < 4) {
-    parsed.shift();
-  }
+  // while (Object.values(parsed[0]).length < 4) {
+  //   parsed.shift();
+  // }
+  let vals = Object.keys(parsed[0]).map(key => {
+    return parsed[0][key];
+  });
   res.json({
     type,
     name,
-    data: Object.values(parsed[0])
+    data: vals
   });
 });
 
@@ -103,12 +106,12 @@ router.post('/wells', upload.any(), function(req, res, next) {
   var first_sheet_name = workbook.SheetNames[0];
   var worksheet = workbook.Sheets[first_sheet_name];
   parsed = xlsx.utils.sheet_to_json(worksheet, {header: 'A', raw: true});
-  parsed.shift();
+  // parsed.shift();
 
   let normalizedData = [];
   let parsedKeys = Object.keys(parsed[0]);
-  parsedKeys.splice(2, 0, "WATER SYSTEM");
-  parsedKeys.splice(3, 0, "TYPE CURVE");
+  // parsedKeys.splice(2, 0, "WATER SYSTEM");
+  // parsedKeys.splice(3, 0, "TYPE CURVE");
   parsed.forEach(obj => {
     let item = {};
     parsedKeys.forEach(key => {
@@ -116,7 +119,7 @@ router.post('/wells', upload.any(), function(req, res, next) {
         obj[key] = null;
       }
       if (parsed[0][key]){
-        item[parsed[0][key].replace('.', '').replace(/ /g, '_')] = obj[key];
+        item[parsed[0][key]] = obj[key];
       } else {
         item[key.replace('.', '').replace(/ /g, '_')] = obj[key];
       }
@@ -125,8 +128,8 @@ router.post('/wells', upload.any(), function(req, res, next) {
   });
   normalizedData.shift();
   normalizedData = normalizedData.map(obj => {
-    obj['TYPE_CURVE'] = `TC1-${obj.LAT_LEN}`;
-    obj.WATER_SYSTEM = `W${obj.RIG.split(' ')[1]}`;
+    // obj['TYPE_CURVE'] = `TC1-${obj.LAT_LEN}`;
+    // obj.WATER_SYSTEM = `W${obj.RIG.split(' ')[1]}`;
     if (obj.SPUD) {
       obj.SPUD = getJsDateFromExcel(obj.SPUD);
     }
