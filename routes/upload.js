@@ -145,12 +145,15 @@ router.post('/wells', upload.any(), function(req, res, next) {
     return obj;
   });
   Wells.drop();
-  normalizedData.forEach(well => {
-    Wells.insert(well);
+  let d = normalizedData.map(well => {
+    return Wells.insert(well);
   });
-  res.json({
-    data: normalizedData
-  });
+  Promise.all(d)
+    .then(data => {
+      res.json({
+        data
+      });
+    });
 });
 
 function getJsDateFromExcel(excelDate) {
