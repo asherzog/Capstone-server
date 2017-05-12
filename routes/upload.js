@@ -4,11 +4,6 @@ var upload = multer()
 var xlsx = require('xlsx')
 var router = express.Router();
 
-const db = require('monk')('localhost/testDB');
-const TC = db.get('TypeCurves');
-const Wells = db.get('wells');
-const Pdp = db.get('pdp');
-
 let name = '';
 let type = '';
 let parsed = '';
@@ -41,6 +36,9 @@ router.post('/', upload.any(), function(req, res, next) {
 });
 
 router.post('/update', (req, res, next) => {
+  var db = require('../db.js').db();
+  const TC = db.get('TypeCurves');
+  const Pdp = db.get('pdp');
   let columnNames = req.body;
   let originalColumns = parsed[0];
   let oldKeyArr = [];
@@ -93,6 +91,9 @@ router.post('/update', (req, res, next) => {
 });
 
 router.post('/wells', upload.any(), function(req, res, next) {
+  var db = require('../db.js').db();
+  const Wells = db.get('wells');
+
   type = req.body.item;
   name = req.body.name;
   let arraybuffer = req.files[0].buffer;

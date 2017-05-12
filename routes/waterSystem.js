@@ -1,12 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
-const db = require('monk')('localhost/testDB');
-const wells = db.get('wells');
-const Pdp = db.get('pdp');
-const TC = db.get('TypeCurves');
 
 router.get('/monthly/:id', (req, res, next) => {
+  var db = require('../db.js').db();
+  const wells = db.get('wells');
+  const Pdp = db.get('pdp');
   var pdp;
   var same = [];
   Pdp.aggregate([
@@ -142,6 +141,10 @@ router.get('/monthly/:id', (req, res, next) => {
 
 
 router.get('/daily/:id', (req, res, next) => {
+  var db = require('../db.js').db();
+  const wells = db.get('wells');
+  const Pdp = db.get('pdp');
+
   var pdp;
   var same = [];
   Pdp.aggregate([
@@ -268,6 +271,8 @@ router.get('/daily/:id', (req, res, next) => {
 
 
 function findValues(well) {
+  var db = require('../db.js').db();
+  const TC = db.get('TypeCurves');
   if (!well.COMPLETION) {
     well.COMPLETION = convertDate(well.SPUD, 60);
   }
@@ -309,6 +314,8 @@ function findValues(well) {
 
 
 function updateWater(well) {
+  var db = require('../db.js').db();
+  const TC = db.get('TypeCurves');
   let totals = {};
   let monthDayCount = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   if (!well.COMPLETION) {

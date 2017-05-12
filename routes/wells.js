@@ -1,16 +1,17 @@
 var express = require('express');
 var router = express.Router();
 
-const db = require('monk')('localhost/testDB');
-const wells = db.get('wells');
-
 router.get('/', function(req, res, next) {
+  var db = require('../db.js').db();
+  const wells = db.get('wells');
   return wells.find({})
     .then(response => res.json(response))
     .catch((err) => next(err));
 });
 
 router.post('/', function(req, res, next) {
+  var db = require('../db.js').db();
+  const wells = db.get('wells');
   let well = req.body;
   if (isValidWell(well)) {
     let newWell = {
@@ -75,12 +76,16 @@ router.post('/', function(req, res, next) {
 });
 
 router.get('/:id', function(req, res, next) {
+  var db = require('../db.js').db();
+  const wells = db.get('wells');
   return wells.find({_id: req.params.id})
     .then(response => res.json(response))
     .catch((err) => next(err));
 });
 
 router.patch('/:id', (req, res, next) => {
+  var db = require('../db.js').db();
+  const wells = db.get('wells');
   return wells.update({_id: req.params.id}, {$set: req.body})
     .then(result => {
       res.json(result);
@@ -88,6 +93,8 @@ router.patch('/:id', (req, res, next) => {
 });
 
 router.delete('/:id', (req, res, next) => {
+  var db = require('../db.js').db();
+  const wells = db.get('wells');
   return wells.findOneAndDelete({_id: req.params.id})
     .then((response) => {
       res.json({

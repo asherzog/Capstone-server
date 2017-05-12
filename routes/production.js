@@ -1,12 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
-const db = require('monk')('localhost/testDB');
-const Wells = db.get('wells');
-const Pdp = db.get('pdp');
-const TC = db.get('TypeCurves');
-
 router.get('/monthly/:id', (req, res, next) => {
+  var db = require('../db.js').db();
+  const Wells = db.get('wells');
+  const Pdp = db.get('pdp');
+  const TC = db.get('TypeCurves');
   if (req.params.id == "gross") {
     var pdp;
     var same = [];
@@ -268,6 +267,10 @@ router.get('/monthly/:id', (req, res, next) => {
 
 
 router.get('/daily/:id', (req, res, next) => {
+  var db = require('../db.js').db();
+  const Wells = db.get('wells');
+  const Pdp = db.get('pdp');
+
   if (req.params.id == 'gross') {
     var pdp;
     var same = [];
@@ -550,6 +553,8 @@ router.get('/daily/:id', (req, res, next) => {
 
 
 function calculateGross(well) {
+  var db = require('../db.js').db();
+  const TC = db.get('TypeCurves');
   let totals = {};
   let monthDayCount = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   let month = Number(well.First_Production.split('/')[0]);
@@ -615,6 +620,8 @@ function calculateGross(well) {
 
 
 function calculateNet(well) {
+  var db = require('../db.js').db();
+  const TC = db.get('TypeCurves');
   let totals = {};
   let monthDayCount = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   let month = Number(well.First_Production.split('/')[0]);
@@ -679,6 +686,8 @@ function calculateNet(well) {
 }
 
 function calculateDailyGross(well) {
+  var db = require('../db.js').db();
+  const TC = db.get('TypeCurves');
   let total = {};
   let monthDayCount = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   let month = Number(well.First_Production.split('/')[0]);
@@ -717,6 +726,8 @@ function calculateDailyGross(well) {
 }
 
 function calculateDailyNet(well) {
+  var db = require('../db.js').db();
+  const TC = db.get('TypeCurves');
   let total = {};
   let monthDayCount = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   let month = Number(well.First_Production.split('/')[0]);

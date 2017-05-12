@@ -1,10 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-const db = require('monk')('localhost/testDB');
-const TC = db.get('TypeCurves');
-
 router.get('/', (req, res, next) => {
+  var db = require('../db.js').db();
+  const TC = db.get('TypeCurves');
   return TC.find({}).then(result => {
     res.json(result);
   })
@@ -12,6 +11,8 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:id', (req, res, next) => {
+  var db = require('../db.js').db();
+  const TC = db.get('TypeCurves');
   return TC.aggregate([
     {
       '$match': {"name": req.params.id}
