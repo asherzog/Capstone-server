@@ -36,9 +36,8 @@ router.post('/', upload.any(), function(req, res, next) {
 });
 
 router.post('/update', (req, res, next) => {
-  var db = require('../db.js').db();
-  const TC = db.get('TypeCurves');
-  const Pdp = db.get('pdp');
+  const TC = require('monk')(`localhost/testDB`).get('TypeCurves');
+  const Pdp = require('monk')(`localhost/testDB`).get('pdp');
   let columnNames = req.body;
   let originalColumns = parsed[0];
   let oldKeyArr = [];

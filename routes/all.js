@@ -5,7 +5,7 @@ var setter = require('../db.js');
 router.get('/allsystems', function(req, res, next) {
   var db = setter.db();
   const wells = db.get('wells');
-  const Pdp = db.get('pdp');
+  const Pdp = require('monk')(`localhost/testDB`).get('pdp');
 
   return wells.distinct("WATER_SYSTEM")
     .then(response => {
@@ -32,8 +32,7 @@ router.get('/allrigs', function(req, res, next) {
 });
 
 router.get('/alltc', function(req, res, next) {
-  var db = setter.db();
-  const TC = db.get('TypeCurves');
+  const TC = require('monk')(`localhost/testDB`).get('TypeCurves');
 
   return TC.distinct("name")
     .then(response => res.json(response))
@@ -41,8 +40,7 @@ router.get('/alltc', function(req, res, next) {
 });
 
 router.get('/allpdp', function(req, res, next) {
-  var db = setter.db();
-  const Pdp = db.get('pdp');
+  const Pdp = require('monk')(`localhost/testDB`).get('pdp');
 
   return Pdp.distinct("LEASE")
     .then(response => res.json(response))

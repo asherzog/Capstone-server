@@ -5,7 +5,7 @@ var router = express.Router();
 router.get('/monthly/:id', (req, res, next) => {
   var db = require('../db.js').db();
   const wells = db.get('wells');
-  const Pdp = db.get('pdp');
+  const Pdp = require('monk')(`localhost/testDB`).get('pdp');
   var pdp;
   var same = [];
   Pdp.aggregate([
@@ -143,7 +143,7 @@ router.get('/monthly/:id', (req, res, next) => {
 router.get('/daily/:id', (req, res, next) => {
   var db = require('../db.js').db();
   const wells = db.get('wells');
-  const Pdp = db.get('pdp');
+  const Pdp = require('monk')(`localhost/testDB`).get('pdp');
 
   var pdp;
   var same = [];
@@ -271,8 +271,7 @@ router.get('/daily/:id', (req, res, next) => {
 
 
 function findValues(well) {
-  var db = require('../db.js').db();
-  const TC = db.get('TypeCurves');
+  const TC = require('monk')(`localhost/testDB`).get('TypeCurves');
   if (!well.COMPLETION) {
     well.COMPLETION = convertDate(well.SPUD, 60);
   }
@@ -314,8 +313,7 @@ function findValues(well) {
 
 
 function updateWater(well) {
-  var db = require('../db.js').db();
-  const TC = db.get('TypeCurves');
+  const TC = require('monk')(`localhost/testDB`).get('TypeCurves');
   let totals = {};
   let monthDayCount = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   if (!well.COMPLETION) {
